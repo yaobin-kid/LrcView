@@ -571,6 +571,15 @@ public class LrcView extends View implements ILrcView {
      */
     public void seekLrcToTime(long time) {
 
+       seekLrcToTime(time,null);
+
+    }
+	
+	/**
+     * @param time 拖动到指定时间
+     */
+    public void seekLrcToTime(long time,Consumer<LrcRow> consumer) {
+
         //no data do nothing
         if (listIsEmpty(mRows)) {
             return;
@@ -591,12 +600,14 @@ public class LrcView extends View implements ILrcView {
             LrcRow next = i + 1 == mRows.size() ? null : mRows.get(i + 1);
             if ((time >= current.CurrentRowTime && next != null && time < next.CurrentRowTime)
                     || (time > current.CurrentRowTime && next == null)) {
+				if (consumer!=null)consumer.accept(current);
                 StartMoveAnimation(current, i);
                 return;
             }
         }
 
     }
+	
 
 
     /**
